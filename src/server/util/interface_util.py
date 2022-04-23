@@ -119,5 +119,6 @@ class InterfaceUtil:
             for line in conf:
                 conf_write.write(line + "\n")
         # Restart the service
+        ProcessUtil.call(["service", "NetworkManager", "restart"])
         ProcessUtil.call(["service", "network-manager", "restart"])
         ProcessUtil.call(["service", "networking", "restart"])
