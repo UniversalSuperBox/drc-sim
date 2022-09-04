@@ -1,8 +1,8 @@
 DRC Sim Server
 ---
 
-Stable: [![Build Status](https://travis-ci.org/rolandoislas/drc-sim.svg?branch=master)](https://travis-ci.org/rolandoislas/drc-sim)
-Dev: [![Build Status](https://travis-ci.org/rolandoislas/drc-sim.svg?branch=develop)](https://travis-ci.org/rolandoislas/drc-sim)
+Stable: [![Build Status](https://travis-ci.org/rodolforg/drc-sim.svg?branch=master)](https://travis-ci.org/rodolforg/drc-sim)
+Dev: [![Build Status](https://travis-ci.org/rodolforg/drc-sim.svg?branch=develop)](https://travis-ci.org/rodolforg/drc-sim)
 
 DRC Sim Server is a utility for pairing a computer to a Wii U to emulate a gamepad.
 
@@ -43,7 +43,7 @@ See the [wiki] for more info.
 [client]: https://github.com/rolandoislas/drc-sim-client/wiki/Home
 [wiki]: https://github.com/rolandoislas/drc-sim/wiki/Home
 [wpa_supplicant]: https://github.com/rolandoislas/drc-hostap
-[drc_sim_c]: https://github.com/rolandoislas/drc-sim-c
+[drc_sim_c]: https://github.com/rodolforg/drc-sim-c
 [memahaxx]: https://bitbucket.org/memahaxx/
 [libdrc documentation]: http://libdrc.org/docs/index.html
 [netifaces]: https://pypi.python.org/pypi/netifaces

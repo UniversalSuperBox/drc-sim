@@ -1,7 +1,7 @@
 import os
 
 # Info
-VERSION = "2.0"
+VERSION = "2.1"
 NAME = "DRC SIM Server"
 
 # Paths
