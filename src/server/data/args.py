@@ -46,11 +46,18 @@ class Args:
             get_key = subparsers.add_parser("get_key")
             get_key.add_argument("wii_u_interface", type=str)
             get_key.add_argument("wps_pin", type=str)
+            # Just Connect to WiiU
+            connect_to_wiiu = subparsers.add_parser('connect_to_wiiu')
+            connect_to_wiiu.add_argument("wii_u_interface", type=str)
+            connect_to_wiiu.add_argument("normal_interface", type=str)
+            connect_to_wiiu.add_argument("-region", type=str, default="none")
         Args.args = arg_parser.parse_args()
         # Add sub arguments
         Args.args.run_server = False
         Args.args.get_key = False
         if "run_server" in sys.argv:
             Args.args.run_server = True
+        elif "connect_to_wiiu" in sys.argv:
+            Args.args.connect_to_wiiu = True
         elif "get_key" in sys.argv:
             Args.args.get_key = True

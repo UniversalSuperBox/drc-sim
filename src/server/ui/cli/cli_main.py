@@ -22,6 +22,9 @@ class CliMain:
             self.run_server()
         elif Args.args.get_key:
             self.get_key()
+        elif Args.args.connect_to_wiiu:
+            self.connect_to_wiiu()
+            input("Press any key to disconnect")
         else:
             self.stop()
 
@@ -34,8 +37,8 @@ class CliMain:
         if self.wpa_supplicant:
             self.wpa_supplicant.stop()
 
-    def run_server(self):
-        LoggerCli.info("Starting server")
+    def connect_to_wiiu(self):
+        LoggerCli.info("Connecting to WiiU")
         normal_interface = Args.args.normal_interface
         wii_u_interface = Args.args.wii_u_interface
         self.check_interfaces(normal_interface, wii_u_interface)
@@ -46,6 +49,11 @@ class CliMain:
         InterfaceUtil.dhclient(wii_u_interface)
         InterfaceUtil.set_metric(wii_u_interface, 1)
         InterfaceUtil.set_metric(normal_interface, 0)
+
+    def run_server(self):
+        self.connect_to_wiiu()
+
+        LoggerCli.info("Starting server")
         self.drc_sim_c = DrcSimC()
         self.drc_sim_c.set_region(Args.args.region)
         self.drc_sim_c.add_status_change_listener(self.drc_sim_c_status_changed)
