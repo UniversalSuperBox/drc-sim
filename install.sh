@@ -177,22 +177,16 @@ install_drc_sim() {
         python="${VIRTUAL_ENV}/bin/${python}"
     fi
     # Get source
-    if [[ "${branch_drc_sim}" != "local" ]]; then
-        # Get repo
-        get_git ${REPO_DRC_SIM} "drc"
-    else
-        # Copy local
-        if [[ ! -f "${cur_dir}/setup.py" ]]; then
-            echo "Cannot perform local install. Missing source files at ${cur_dir}."
-            return 1
-        fi
-        if [[ ! -d "${INSTALL_DIR}" ]]; then
-            mkdir "${INSTALL_DIR}" &> /dev/null || return 1
-        fi
-        rm -rf ${drc_dir} &> /dev/null || return 1
-        mkdir ${drc_dir} &> /dev/null || return 1
-        cp -R "${cur_dir}/." "${drc_dir%/*}" &> /dev/null || return 1
+    if [[ ! -f "${cur_dir}/setup.py" ]]; then
+        echo "Cannot perform local install. Missing source files at ${cur_dir}."
+        return 1
     fi
+    if [[ ! -d "${INSTALL_DIR}" ]]; then
+        mkdir "${INSTALL_DIR}" &> /dev/null || return 1
+    fi
+    rm -rf ${drc_dir} &> /dev/null || return 1
+    mkdir ${drc_dir} &> /dev/null || return 1
+    cp -R "${cur_dir}/." "${drc_dir%/*}" &> /dev/null || return 1
     # Install python dependencies
     echo "Installing setuptools"
     ${python} -m pip install setuptools &> /dev/null || return 1
@@ -203,12 +197,7 @@ install_drc_sim() {
     # Set the directory
     cd "${drc_dir}" &> /dev/null || return 1
     # Branch to checkout
-    if [[ "${branch_drc_sim}" != "local" ]]; then
-        echo "Using branch \"${branch_drc_sim}\" for drc-sim install"
-        git checkout ${branch_drc_sim} &> /dev/null || return 1
-    else
-        echo "Using current directory as install source"
-    fi
+    echo "Using current directory as install source"
     # Install
     echo "Installing drc-sim"
     echo "Downloading Python packages. This may take a while."
