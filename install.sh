@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -x
 # drc-sim(-backend): Wii U gamepad emulator.
 #
 # drc-sim-backend install script
@@ -25,8 +25,8 @@
 
 VERSION="1.2"
 REPO_DRC_SIM="https://github.com/rodolforg/drc-sim.git"
-REPO_WPA_SUPPLICANT_DRC="https://github.com/rolandoislas/drc-hostap.git"
-REPO_DRC_SIM_C="https://github.com/rodolforg/drc-sim-c.git"
+SCRIPT=$(realpath "$0")
+COMPILE_DIR=$(dirname "$SCRIPT")
 INSTALL_DIR="/opt/drc_sim/"
 dependencies=()
 branch_drc_sim=""
@@ -130,9 +130,8 @@ get_git() {
 
 # Compiles wpa_supplicant after fetching it from git
 compile_wpa() {
-    get_git ${REPO_WPA_SUPPLICANT_DRC} "wpa"
     echo "Compiling wpa_supplicant_drc"
-    compile_dir="${INSTALL_DIR}wpa/wpa_supplicant/"
+    compile_dir="${COMPILE_DIR}/drc-hostap/wpa_supplicant/"
     cur_dir="${PWD}"
     cd "${compile_dir}" &> /dev/null || return 1
     cp ../conf/wpa_supplicant.config ./.config &> /dev/null || return 1
@@ -148,9 +147,8 @@ compile_wpa() {
 
 # Compiles drc_sim_c after fetching it from git
 compile_drc_sim_c() {
-    get_git ${REPO_DRC_SIM_C} "drc_sim_c"
     echo "Compiling drc_sim_c"
-    compile_dir="${INSTALL_DIR}drc_sim_c/"
+    compile_dir="${COMPILE_DIR}/drc-sim-c/"
     cur_dir="${PWD}"
     cd "${compile_dir}" &> /dev/null || return 1
     compile_log="${compile_dir}make.log"

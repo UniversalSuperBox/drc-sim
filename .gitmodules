@@ -1,0 +1,7 @@
+[submodule "drc-sim-c"]
+	path = drc-sim-c
+	url = https://github.com/UniversalSuperBox/drc-sim-c.git
+	branch = master
+[submodule "drc-hostap.git"]
+	path = drc-hostap
+	url = https://github.com/UniversalSuperBox/drc-hostap.git
