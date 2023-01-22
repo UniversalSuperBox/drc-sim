@@ -188,6 +188,8 @@ install_drc_sim() {
     rm -rf ${drc_dir} &> /dev/null || return 1
     mkdir ${drc_dir} &> /dev/null || return 1
     cp -R "${cur_dir}/." "${drc_dir%/*}" &> /dev/null || return 1
+    # Work around https://github.com/pypa/setuptools/issues/3278
+    export SETUPTOOLS_USE_DISTUTILS=stdlib
     # Install python dependencies
     echo "Installing setuptools"
     ${python} -m pip install setuptools &> /dev/null || return 1
