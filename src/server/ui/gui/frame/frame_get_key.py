@@ -1,5 +1,5 @@
 from tkinter import PhotoImage, Button, END, messagebox
-from tkinter.ttk import Entry, Combobox, Label
+from tkinter.ttk import Entry, Combobox, Label, Notebook
 
 from src.server.data import constants
 from src.server.data.resource import Resource
@@ -11,12 +11,12 @@ from src.server.util.wpa_supplicant import WpaSupplicant
 
 
 class FrameGetKey(FrameTab):
-    def __init__(self, master=None, **kw):
+    def __init__(self, master: Notebook=None, **kw):
         FrameTab.__init__(self, master, **kw)
         self.wpa_supplicant = None
         self.getting_psk = False
         # Widgets
-        button_size = 50
+        button_size = int(master.winfo_fpixels("3c"))
         # Spade
         self.button_spade = Button(self, width=button_size, height=button_size)
         self.button_spade.image = self.get_image("image/spade.gif", button_size, button_size)
