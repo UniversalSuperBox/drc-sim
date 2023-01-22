@@ -30,6 +30,7 @@ COMPILE_DIR=$(dirname "$SCRIPT")
 INSTALL_DIR="/opt/drc_sim/"
 dependencies=()
 branch_drc_sim=""
+PROCESSORS=$(nproc)
 
 # Checks to see if OS has apt-get and sets dependencies
 # Exits otherwise
@@ -137,7 +138,7 @@ compile_wpa() {
     cp ../conf/wpa_supplicant.config ./.config &> /dev/null || return 1
     compile_log="${compile_dir}make.log"
     echo "Compile log at ${compile_log}"
-    if ! make &> ${compile_log}; then cat "${compile_log}"; return 1; fi
+    if ! make -j"$PROCESSORS" &> ${compile_log}; then cat "${compile_log}"; return 1; fi
     echo "Installing wpa_supplicant_drc and wpa_cli_drc to /usr/local/bin"
     cp wpa_supplicant /usr/local/bin/wpa_supplicant_drc &> /dev/null || return 1
     cp wpa_cli /usr/local/bin/wpa_cli_drc &> /dev/null || return 1
@@ -155,9 +156,9 @@ compile_drc_sim_c() {
     cmake_log="${compile_dir}cmake.log"
     echo "Compile log at ${compile_log}"
     if ! cmake "${compile_dir}" &> "${cmake_log}"; then cat "${cmake_log}"; return 1; fi
-    if ! make &> "${compile_log}"; then cat "${compile_log}"; return 1; fi
+    if ! make -j"$PROCESSORS" &> "${compile_log}"; then cat "${compile_log}"; return 1; fi
     echo "Installing drc_sim_c to /usr/local/bin"
-    make install &> /dev/null || return 1
+    make -j"$PROCESSORS" install &> /dev/null || return 1
     cd "${cur_dir}" &> /dev/null || return 1
     return 0
 }
