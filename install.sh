@@ -172,7 +172,10 @@ install_drc_sim() {
     # Fix virtualenv paths
     prefix=""
     python="python3"
-    if [ ! -z "${VIRTUAL_ENV}" ]; then
+    if [ -n "${VIRTUAL_ENV}" ]; then
+        if [ ! -d "${VIRTUAL_ENV}" ]; then
+            python3 -m virtualenv "${VIRTUAL_ENV}" || return 1
+        fi
         echo "Installing into virtualenv: ${VIRTUAL_ENV}"
         prefix="--prefix ${VIRTUAL_ENV}"
         python="${VIRTUAL_ENV}/bin/${python}"
@@ -275,7 +278,7 @@ check_args() {
     elif [[ "${1}" == "uninstall" ]]; then
         uninstall
     # Install branch
-    elif [[ "${branch_drc_sim}" != "develop" ]] && [[ "${branch_drc_sim}" != "master" ]] && 
+    elif [[ "${branch_drc_sim}" != "develop" ]] && [[ "${branch_drc_sim}" != "master" ]] &&
          [[ "${branch_drc_sim}" != "local" ]]; then
         echo "Invalid branch \"${1}\""
         check_args "help"
