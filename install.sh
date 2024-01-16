@@ -66,12 +66,12 @@ install_dependencies() {
     echo "Installing dependencies."
     for dependency in "${dependencies[@]}"
     do
-        installed="$(dpkg -s ${dependency} 2>&1)"
+        installed="$(dpkg -s "${dependency}" 2>&1)"
         if [[ ${installed} =~ "Status: install ok installed" ]]; then
             echo "${dependency} [INSTALLED]"
         else
             echo "${dependency} [INSTALLING]"
-            if command apt-get -y install ${dependency} &> /dev/null; then
+            if command apt-get -y install "${dependency}" &> /dev/null; then
                 echo "${dependency} [INSTALLED]"
             else
                 echo "${dependency} [FAILED]"
@@ -83,6 +83,7 @@ install_dependencies() {
 
 # Update git directory while stashing changed return 1
 # Returns 1 on failure
+# shellcheck disable=SC2317
 update_git() {
     cur_dir="${PWD}"
     cd "${1}" &> /dev/null || return 1
@@ -109,9 +110,10 @@ update_git() {
 # Clones a git repo to the install path
 # If the directory exists it is removed
 # Param $1: git repo url
+# shellcheck disable=SC2317
 get_git() {
     git_dir="${INSTALL_DIR}${2}"
-    if update_git ${git_dir}; then
+    if update_git "${git_dir}"; then
         return 0
     else
         # Remove directory for a clean clone
@@ -121,7 +123,7 @@ get_git() {
     fi
     # Clone
     echo "Cloning ${1} into ${git_dir}"
-    if command git clone ${1} ${git_dir} &> /dev/null; then
+    if command git clone "${1}" "${git_dir}" &> /dev/null; then
         echo "Cloned ${1}"
     else
         echo "Failed to clone ${1}"
@@ -130,6 +132,7 @@ get_git() {
 }
 
 # Compiles wpa_supplicant after fetching it from git
+# shellcheck disable=SC2317
 compile_wpa() {
     echo "Compiling wpa_supplicant_drc"
     compile_dir="${COMPILE_DIR}/drc-hostap/wpa_supplicant/"
@@ -138,7 +141,7 @@ compile_wpa() {
     cp ../conf/wpa_supplicant.config ./.config &> /dev/null || return 1
     compile_log="${compile_dir}make.log"
     echo "Compile log at ${compile_log}"
-    if ! make -j"$PROCESSORS" &> ${compile_log}; then cat "${compile_log}"; return 1; fi
+    if ! make -j"$PROCESSORS" &> "${compile_log}"; then cat "${compile_log}"; return 1; fi
     echo "Installing wpa_supplicant_drc and wpa_cli_drc to /usr/local/bin"
     cp wpa_supplicant /usr/local/bin/wpa_supplicant_drc &> /dev/null || return 1
     cp wpa_cli /usr/local/bin/wpa_cli_drc &> /dev/null || return 1
@@ -147,6 +150,7 @@ compile_wpa() {
 }
 
 # Compiles drc_sim_c after fetching it from git
+# shellcheck disable=SC2317
 compile_drc_sim_c() {
     echo "Compiling drc_sim_c"
     compile_dir="${COMPILE_DIR}/drc-sim-c/"
@@ -164,6 +168,7 @@ compile_drc_sim_c() {
 }
 
 # Installs drc-sim in a virtualenv
+# shellcheck disable=SC2317
 install_drc_sim() {
     echo "Installing DRC Sim Server GUI/CLI Utility"
     # Paths
@@ -188,8 +193,8 @@ install_drc_sim() {
     if [[ ! -d "${INSTALL_DIR}" ]]; then
         mkdir "${INSTALL_DIR}" &> /dev/null || return 1
     fi
-    rm -rf ${drc_dir} &> /dev/null || return 1
-    mkdir ${drc_dir} &> /dev/null || return 1
+    rm -rf "${drc_dir}" &> /dev/null || return 1
+    mkdir "${drc_dir}" &> /dev/null || return 1
     cp -R "${cur_dir}/." "${drc_dir%/*}" &> /dev/null || return 1
     # Work around https://github.com/pypa/setuptools/issues/3278
     export SETUPTOOLS_USE_DISTUTILS=stdlib
@@ -207,7 +212,7 @@ install_drc_sim() {
     # Install
     echo "Installing drc-sim"
     echo "Downloading Python packages. This may take a while."
-    if ! ${python} "${drc_dir}setup.py" install ${prefix} --record "${drc_dir}/install.txt" &> \
+    if ! ${python} "${drc_dir}setup.py" install "${prefix}" --record "${drc_dir}/install.txt" &> \
         "/tmp/drc-sim-py-install.log"; then
         cat "/tmp/drc-sim-py-install.log"
         return 1
@@ -231,7 +236,7 @@ uninstall() {
     if [[ -f "${drc_install_log}" ]]; then
         echo "Files to remove:"
         cat ${drc_install_log}
-        read -p "Remove these files? [Y/N]" reponse
+        read -rp "Remove these files? [Y/N]" reponse
         if [[ ${reponse} =~ [Yy](es)* ]]; then
             tr '\n' '\0' < ${drc_install_log} | xargs -0 sudo rm -f --
             echo "Removed Python installed files"
@@ -245,10 +250,10 @@ uninstall() {
     fi
     # Launcher (.desktop)
     to_remove=("/usr/share/applications/drc-sim-backend.desktop" "/usr/share/applications/drcsimbackend.desktop"
-        "/usr/share/icons/hicolor/512x512/apps/drcsimbackend.png", "/usr/share/polkit-1/actions/com.rolandoislas.drcsim.server.policy")
+        "/usr/share/icons/hicolor/512x512/apps/drcsimbackend.png" "/usr/share/polkit-1/actions/com.rolandoislas.drcsim.server.policy")
     for item in "${to_remove[@]}"; do
         if [[ -f "${item}" ]]; then
-            rm -f ${item} &> /dev/null
+            rm -f "${item}" &> /dev/null
         fi
     done
     # Install dir
@@ -256,7 +261,8 @@ uninstall() {
     rm -rf ${INSTALL_DIR} &> /dev/null || echo "Failed to remove install directory."
     # TODO uninstall packages
     printf "\nNOT removing package dependencies\n"
-    printf "${dependencies[*]}\n\n"
+    echo "${dependencies[@]}"
+    echo
     # Done
     echo "Uninstalled DRC Sim Server"
     exit 0
@@ -289,9 +295,9 @@ check_args() {
 # If the command exited with a zero exit value the success message will be echoed
 pass_fail() {
     if $1; then
-        echo $2
+        echo "$2"
     else
-        echo $3
+        echo "$3"
         exit 1
     fi
 }
