@@ -126,5 +126,5 @@ class CliMain:
         if not os.path.exists(constants.PATH_TMP):
             os.mkdir(constants.PATH_TMP)
         tmp_conf = open(constants.PATH_CONF_CONNECT_TMP, "w")
-        tmp_conf.write(Resource("config/get_psk.conf").resource)
+        tmp_conf.write(Resource("config/get_psk.conf").resource.decode())
         tmp_conf.close()
