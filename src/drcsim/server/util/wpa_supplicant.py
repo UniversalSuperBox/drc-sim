@@ -5,11 +5,11 @@ from threading import Thread
 
 import pexpect
 
-from src.server.data import constants
-from src.server.data.config_general import ConfigGeneral
-from src.server.util.logging.logger_wpa import LoggerWpa
-from src.server.util.process_util import ProcessUtil
-from src.server.util.status_sending_thread import StatusSendingThread
+from drcsim.server.data import constants
+from drcsim.server.data.config_general import ConfigGeneral
+from drcsim.server.util.logging.logger_wpa import LoggerWpa
+from drcsim.server.util.process_util import ProcessUtil
+from drcsim.server.util.status_sending_thread import StatusSendingThread
 
 
 class WpaSupplicant(StatusSendingThread):
@@ -74,7 +74,7 @@ class WpaSupplicant(StatusSendingThread):
     def check_status(self):
         """
         Thread that checks WPA status every second
-        Updates 
+        Updates
         :return: None
         """
         while self.running:

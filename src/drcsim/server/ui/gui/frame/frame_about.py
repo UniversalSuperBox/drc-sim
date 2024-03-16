@@ -1,7 +1,7 @@
 from tkinter import Label
 
-from src.server.data import constants
-from src.server.ui.gui.frame.frame_tab import FrameTab
+from drcsim.server.data import constants
+from drcsim.server.ui.gui.frame.frame_tab import FrameTab
 
 
 class FrameAbout(FrameTab):

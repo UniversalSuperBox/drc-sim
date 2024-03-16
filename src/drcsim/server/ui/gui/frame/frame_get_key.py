@@ -1,13 +1,13 @@
 from tkinter import PhotoImage, Button, END, messagebox
 from tkinter.ttk import Entry, Combobox, Label, Notebook
 
-from src.server.data import constants
-from src.server.data.resource import Resource
-from src.server.ui.cli.cli_main import CliMain
-from src.server.ui.gui.frame.frame_tab import FrameTab
-from src.server.util.interface_util import InterfaceUtil
-from src.server.util.logging.logger_gui import LoggerGui
-from src.server.util.wpa_supplicant import WpaSupplicant
+from drcsim.server.data import constants
+from drcsim.server.data.resource import Resource
+from drcsim.server.ui.cli.cli_main import CliMain
+from drcsim.server.ui.gui.frame.frame_tab import FrameTab
+from drcsim.server.util.interface_util import InterfaceUtil
+from drcsim.server.util.logging.logger_gui import LoggerGui
+from drcsim.server.util.wpa_supplicant import WpaSupplicant
 
 
 class FrameGetKey(FrameTab):

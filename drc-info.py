@@ -6,7 +6,7 @@ import sys
 import time
 from threading import Thread
 
-from src.server.data.struct import input, command
+from drcsim.server.data.struct import input, command
 
 PORT_WII_MSG = 50010
 PORT_WII_VID = 50020

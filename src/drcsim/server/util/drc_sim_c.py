@@ -3,12 +3,12 @@ from threading import Thread
 
 import time
 
-from src.server.data import constants
-from src.server.data.args import Args
-from src.server.data.config_general import ConfigGeneral
-from src.server.util.logging.logger_backend import LoggerBackend
-from src.server.util.process_util import ProcessUtil
-from src.server.util.status_sending_thread import StatusSendingThread
+from drcsim.server.data import constants
+from drcsim.server.data.args import Args
+from drcsim.server.data.config_general import ConfigGeneral
+from drcsim.server.util.logging.logger_backend import LoggerBackend
+from drcsim.server.util.process_util import ProcessUtil
+from drcsim.server.util.status_sending_thread import StatusSendingThread
 
 
 class DrcSimC(StatusSendingThread):

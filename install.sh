@@ -38,7 +38,7 @@ check_os() {
     if command -v apt-get &> /dev/null; then
         echo "Command apt-get found."
         # Backend dependencies
-        dependencies=("python3" "python3-pip"
+        dependencies=("python3" "python3-pip" "python3-virtualenv"
         "net-tools" "wireless-tools" "sysvinit-utils" "psmisc" "rfkill"
         "isc-dhcp-client" "ifmetric" "python3-tk" "policykit-1")
         # Wpa supplicant compile dependencies
@@ -175,20 +175,13 @@ install_drc_sim() {
     drc_dir="${INSTALL_DIR}drc/"
     cur_dir="${PWD}"
     # Fix virtualenv paths
-    prefix=""
     python="python3"
     if [ -n "${VIRTUAL_ENV}" ]; then
         if [ ! -d "${VIRTUAL_ENV}" ]; then
             python3 -m virtualenv "${VIRTUAL_ENV}" || return 1
         fi
         echo "Installing into virtualenv: ${VIRTUAL_ENV}"
-        prefix="--prefix ${VIRTUAL_ENV}"
         python="${VIRTUAL_ENV}/bin/${python}"
-    fi
-    # Get source
-    if [[ ! -f "${cur_dir}/setup.py" ]]; then
-        echo "Cannot perform local install. Missing source files at ${cur_dir}."
-        return 1
     fi
     if [[ ! -d "${INSTALL_DIR}" ]]; then
         mkdir "${INSTALL_DIR}" &> /dev/null || return 1
@@ -196,11 +189,9 @@ install_drc_sim() {
     rm -rf "${drc_dir}" &> /dev/null || return 1
     mkdir "${drc_dir}" &> /dev/null || return 1
     cp -R "${cur_dir}/." "${drc_dir%/*}" &> /dev/null || return 1
-    # Work around https://github.com/pypa/setuptools/issues/3278
-    export SETUPTOOLS_USE_DISTUTILS=stdlib
     # Install python dependencies
     echo "Installing setuptools"
-    ${python} -m pip install setuptools &> /dev/null || return 1
+    ${python} -m pip install -U setuptools &> /dev/null || return 1
     # Remove an existing install of drc-sim
     echo "Attempting to remove previous installations"
     ${python} -m pip uninstall -y drcsim &> /dev/null || \
@@ -212,7 +203,7 @@ install_drc_sim() {
     # Install
     echo "Installing drc-sim"
     echo "Downloading Python packages. This may take a while."
-    if ! ${python} "${drc_dir}setup.py" install "${prefix}" --record "${drc_dir}/install.txt" &> \
+    if ! ${python} -m pip install "${drc_dir}" &> \
         "/tmp/drc-sim-py-install.log"; then
         cat "/tmp/drc-sim-py-install.log"
         return 1

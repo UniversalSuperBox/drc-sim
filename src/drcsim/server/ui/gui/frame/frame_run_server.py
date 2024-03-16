@@ -2,12 +2,12 @@ import os
 from tkinter import messagebox
 from tkinter.ttk import Label, Button, Combobox
 
-from src.server.data import constants
-from src.server.ui.gui.frame.frame_tab import FrameTab
-from src.server.util.drc_sim_c import DrcSimC
-from src.server.util.interface_util import InterfaceUtil
-from src.server.util.logging.logger_gui import LoggerGui
-from src.server.util.wpa_supplicant import WpaSupplicant
+from drcsim.server.data import constants
+from drcsim.server.ui.gui.frame.frame_tab import FrameTab
+from drcsim.server.util.drc_sim_c import DrcSimC
+from drcsim.server.util.interface_util import InterfaceUtil
+from drcsim.server.util.logging.logger_gui import LoggerGui
+from drcsim.server.util.wpa_supplicant import WpaSupplicant
 
 
 class FrameRunServer(FrameTab):

@@ -1,14 +1,14 @@
 import os
 import time
 
-from src.server.data import constants
-from src.server.data.args import Args
-from src.server.data.resource import Resource
-from src.server.util.drc_sim_c import DrcSimC
-from src.server.util.interface_util import InterfaceUtil
-from src.server.util.logging.logger_cli import LoggerCli
-from src.server.util.process_util import ProcessUtil
-from src.server.util.wpa_supplicant import WpaSupplicant
+from drcsim.server.data import constants
+from drcsim.server.data.args import Args
+from drcsim.server.data.resource import Resource
+from drcsim.server.util.drc_sim_c import DrcSimC
+from drcsim.server.util.interface_util import InterfaceUtil
+from drcsim.server.util.logging.logger_cli import LoggerCli
+from drcsim.server.util.process_util import ProcessUtil
+from drcsim.server.util.wpa_supplicant import WpaSupplicant
 
 
 class CliMain:

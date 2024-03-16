@@ -1,10 +1,10 @@
 import netifaces
 import os
 
-from src.server.data import constants
-from src.server.util.logging.logger import Logger
-from src.server.util.os_util import OsUtil
-from src.server.util.process_util import ProcessUtil
+from drcsim.server.data import constants
+from drcsim.server.util.logging.logger import Logger
+from drcsim.server.util.os_util import OsUtil
+from drcsim.server.util.process_util import ProcessUtil
 
 
 class InterfaceUtil:

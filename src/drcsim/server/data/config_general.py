@@ -1,4 +1,4 @@
-from src.server.data.config import Config
+from drcsim.server.data.config import Config
 
 
 class ConfigGeneral:

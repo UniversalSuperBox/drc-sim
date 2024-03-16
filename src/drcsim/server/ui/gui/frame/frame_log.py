@@ -2,8 +2,8 @@ import os
 import subprocess
 from tkinter import Button, CENTER, messagebox
 
-from src.server.data import constants
-from src.server.ui.gui.frame.frame_tab import FrameTab
+from drcsim.server.data import constants
+from drcsim.server.ui.gui.frame.frame_tab import FrameTab
 
 
 class FrameLog(FrameTab):

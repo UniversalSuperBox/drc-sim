@@ -1,12 +1,12 @@
 import tkinter
 from tkinter.ttk import Notebook
 
-from src.server.data.resource import Resource
-from src.server.ui.gui.frame.frame_about import FrameAbout
-from src.server.ui.gui.frame.frame_get_key import FrameGetKey
-from src.server.ui.gui.frame.frame_log import FrameLog
-from src.server.ui.gui.frame.frame_run_server import FrameRunServer
-from src.server.util.logging.logger_gui import LoggerGui
+from drcsim.server.data.resource import Resource
+from drcsim.server.ui.gui.frame.frame_about import FrameAbout
+from drcsim.server.ui.gui.frame.frame_get_key import FrameGetKey
+from drcsim.server.ui.gui.frame.frame_log import FrameLog
+from drcsim.server.ui.gui.frame.frame_run_server import FrameRunServer
+from drcsim.server.util.logging.logger_gui import LoggerGui
 
 
 class GuiMain:
@@ -63,7 +63,7 @@ class GuiMain:
     def start(self):
         """
         Start the main window loop
-        :return: 
+        :return:
         """
         LoggerGui.info("Opening GUI")
         self.after()

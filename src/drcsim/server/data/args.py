@@ -2,7 +2,7 @@ import argparse
 
 import sys
 
-from src.server.data import constants
+from drcsim.server.data import constants
 
 
 class Args:

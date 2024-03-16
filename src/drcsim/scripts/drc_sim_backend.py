@@ -2,16 +2,16 @@
 import os
 import sys
 
-from src.server.data import constants
-from src.server.data.args import Args
-from src.server.data.config_general import ConfigGeneral
-from src.server.ui.cli.cli_main import CliMain
-from src.server.util.logging.logger import Logger
-from src.server.util.logging.logger_backend import LoggerBackend
-from src.server.util.logging.logger_cli import LoggerCli
-from src.server.util.logging.logger_gui import LoggerGui
-from src.server.util.logging.logger_wpa import LoggerWpa
-from src.server.util.os_util import OsUtil
+from drcsim.server.data import constants
+from drcsim.server.data.args import Args
+from drcsim.server.data.config_general import ConfigGeneral
+from drcsim.server.ui.cli.cli_main import CliMain
+from drcsim.server.util.logging.logger import Logger
+from drcsim.server.util.logging.logger_backend import LoggerBackend
+from drcsim.server.util.logging.logger_cli import LoggerCli
+from drcsim.server.util.logging.logger_gui import LoggerGui
+from drcsim.server.util.logging.logger_wpa import LoggerWpa
+from drcsim.server.util.os_util import OsUtil
 
 
 def init_loggers():
@@ -45,7 +45,7 @@ def start():
             ui = CliMain()
         else:
             Logger.info("Enabling GUI")
-            from src.server.ui.gui.gui_main import GuiMain
+            from drcsim.server.ui.gui.gui_main import GuiMain
             ui = GuiMain()
         ui.start()
     except KeyboardInterrupt:
@@ -75,7 +75,7 @@ def log_level():
 def check_root():
     """
     Exit if not root
-    :return: 
+    :return:
     """
     if os.getuid() != 0:
         Logger.throw("Not running as root!")

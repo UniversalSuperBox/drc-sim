@@ -1,4 +1,4 @@
-from src.server.util.logging.logger import Logger
+from drcsim.server.util.logging.logger import Logger
 
 
 class LoggerCli(Logger):
