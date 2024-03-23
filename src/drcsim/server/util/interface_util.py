@@ -37,12 +37,26 @@ class InterfaceUtil:
 
     @classmethod
     def is_interface_wiiu_compatible(cls, interface):
-        if not OsUtil.is_linux():
-            Logger.extra("Ignoring interface compatibility check for %s", interface)
+        # I kinda hate this implementation, but I'm not sure how to get
+        # this information programmatically any other way. This is
+        # fragile.
+        iwcommand = ["iw", "dev", interface, "info"]
+        iwdev = ProcessUtil.get_output(iwcommand).strip()
+        if not iwdev.startswith("Interface"):
             return False
-        frequency_info = ProcessUtil.get_output(["iwlist", interface, "frequency"])
-        return "5." in frequency_info
-        # TODO check for 802.11n compliance
+        splitiwdev = iwdev.split("\n")
+        for line in splitiwdev:
+            if "wiphy" not in line:
+                continue
+            phynum = line.strip().split()[1]
+            break
+        else:
+            raise ValueError(f"Failed to parse phyname from {iwcommand}")
+        phyname = "phy" + phynum
+        phyinfo = ProcessUtil.get_output(["iw", "phy", phyname, "info"])
+        # 5180 MHz, channel 36, should be available in all regulatory
+        # domains
+        return "5180" in phyinfo
 
     @classmethod
     def get_ip(cls, interface):

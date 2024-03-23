@@ -39,7 +39,7 @@ check_os() {
         echo "Command apt-get found."
         # Backend dependencies
         dependencies=("python3" "python3-pip" "python3-virtualenv"
-        "net-tools" "wireless-tools" "sysvinit-utils" "psmisc" "rfkill"
+        "net-tools" "iw" "sysvinit-utils" "psmisc" "rfkill"
         "isc-dhcp-client" "ifmetric" "python3-tk" "policykit-1")
         # Wpa supplicant compile dependencies
         dependencies+=("git" "libssl-dev" "libnl-genl-3-dev" "gcc" "make" "pkg-config")
