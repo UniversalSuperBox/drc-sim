@@ -73,13 +73,9 @@ class InterfaceUtil:
         return "0"
 
     @classmethod
-    def set_metric(cls, interface, metric):
-        ProcessUtil.call(["ifmetric", interface, str(metric)])
-
-    @classmethod
     def dhclient(cls, interface):
         ProcessUtil.call(["killall", "dhclient"])
-        ProcessUtil.call(["dhclient", interface])
+        ProcessUtil.call(["dhclient", interface, "-e", "IF_METRIC=9999", "-e", "METRIC=9999"])
 
     @classmethod
     def is_managed_by_network_manager(cls, interface):

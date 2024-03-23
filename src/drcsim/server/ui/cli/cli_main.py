@@ -47,8 +47,6 @@ class CliMain:
         self.wpa_supplicant.connect(constants.PATH_CONF_CONNECT, wii_u_interface)
         self.wpa_supplicant.add_status_change_listener(self.status_changed)
         InterfaceUtil.dhclient(wii_u_interface)
-        InterfaceUtil.set_metric(wii_u_interface, 1)
-        InterfaceUtil.set_metric(normal_interface, 0)
 
     def run_server(self):
         self.connect_to_wiiu()
