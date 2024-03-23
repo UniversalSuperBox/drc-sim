@@ -69,21 +69,8 @@ class InterfaceUtil:
 
     @classmethod
     def is_managed_by_network_manager(cls, interface):
-        if not os.path.exists(constants.PATH_CONF_NETWORK_MANAGER):
-            Logger.debug("Network manager config not found.")
-            return False
-        conf = open(constants.PATH_CONF_NETWORK_MANAGER)
-        conf_data = conf.readlines()
-        conf.close()
-        managed = False
-        device_entry = cls.get_device_unmanaged_entry(interface)
-        for line in conf_data:
-            if line.startswith("unmanaged-devices=") and device_entry not in line:
-                managed = True  # Ensure configs with duplicates raise an unmanaged prompt
-        if "unmanaged-devices=" not in " ".join(conf_data):
-            managed = True
-        Logger.debug("Interface \"%s\" managed by network manager: %s", interface, managed)
-        return managed
+        output = ProcessUtil.get_output(["nmcli", "-g", "GENERAL.STATE", "device", "show", interface]).strip()
+        return "unmanaged" not in output
 
     @classmethod
     def get_device_unmanaged_entry(cls, interface):
