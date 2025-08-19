@@ -309,9 +309,8 @@ class WpaSupplicant(StatusSendingThread):
         """
         LoggerWpa.debug("Saving connection config")
         # add additional connect information to config
-        conf = open(constants.PATH_CONF_CONNECT_TMP, "r")
-        lines = conf.readlines()
-        conf.close()
+        with open(constants.PATH_CONF_CONNECT_TMP, "r") as conf:
+            lines = conf.readlines()
         for line in lines:
             if "update_config=1" in line:
                 lines.insert(lines.index(line) + 1, "ap_scan=1\n")
@@ -321,7 +320,6 @@ class WpaSupplicant(StatusSendingThread):
                 lines.insert(lines.index(line) + 1, "\tscan_ssid=1\n")
                 lines.insert(lines.index(line) + 2, "\tbssid=" + bssid + "\n")
                 break
-        save_conf = open(constants.PATH_CONF_CONNECT, "w")
-        save_conf.writelines(lines)
-        save_conf.close()
+        with open(constants.PATH_CONF_CONNECT, "w") as save_conf:
+            save_conf.writelines(lines)
         LoggerWpa.info("Authenticated with the Wii U")
