@@ -1,18 +1,28 @@
 DRC Sim Server
 ---
 
-Stable: [![Build Status](https://travis-ci.org/rodolforg/drc-sim.svg?branch=master)](https://travis-ci.org/rodolforg/drc-sim)
-Dev: [![Build Status](https://travis-ci.org/rodolforg/drc-sim.svg?branch=develop)](https://travis-ci.org/rodolforg/drc-sim)
+# Running from source directory
 
-DRC Sim Server is a utility for pairing a computer to a Wii U to emulate a gamepad.
+Last tested on Fedora 42
 
-It needs a [client] for full functionality.
+## Build wpa_supplicant
 
-See the [wiki] for more info.
+```sh
+cd drc-hostap/wpa_supplicant
+cp ../conf/wpa_supplicant.config .config
+make "-j$(nproc)" EXTRA_CFLAGS='-Wno-format-truncation'
+```
 
-# Installation
+## Backend GUI
 
-[Installation instructions] are available on the wiki.
+1. Install the dependencies (depends.fedora.txt)
+1. Install Pipenv (`pipx install pipenv`)
+1. `pipenv install -e .`
+1. `sudo "$(pipenv --venv)/bin/drc-sim-backend" --verbose --wpa-supplicant="$(pwd)/drc-hostap/wpa_supplicant/wpa_supplicant" --wpa-cli="$(pwd)/drc-hostap/wpa_supplicant/wpa_cli"`
+
+The GUI doesn't have any cleanup functionality, so it won't re-manage your wifi interface when it's done with it. Use `nmcli d se <interface name> managed yes` to re-enable NetworkManager functionality.
+
+If you're running the GUI in a container, you'll need to give it some help. Use `nmcli d se <interface> managed no` to unmanage the interface for it.
 
 # Credits
 
@@ -40,8 +50,6 @@ See the [wiki] for more info.
 [drc-sim]: https://bitbucket.org/memahaxx/drc-sim
 [drc-sim-keyboard]: https://github.com/justjake/drc-sim-keyboard
 [Installation instructions]: https://github.com/rolandoislas/drc-sim/wiki/Install
-[client]: https://github.com/rolandoislas/drc-sim-client/wiki/Home
-[wiki]: https://github.com/rolandoislas/drc-sim/wiki/Home
 [wpa_supplicant]: https://github.com/rolandoislas/drc-hostap
 [drc_sim_c]: https://github.com/rodolforg/drc-sim-c
 [memahaxx]: https://bitbucket.org/memahaxx/

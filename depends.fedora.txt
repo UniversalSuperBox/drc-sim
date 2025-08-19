@@ -1,0 +1,4 @@
+python3 python3-pip python3-virtualenv python3-devel net-tools psmisc rfkill python3-tkinter polkit iw NetworkManager dhclient \
+git openssl-devel libnl3-devel gcc make pkgconf-pkg-config \
+libavcodec-free-devel libswscale-free-devel libjpeg-turbo-devel cmake zlib-devel g++ openh264 \
+pipx

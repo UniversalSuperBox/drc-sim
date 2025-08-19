@@ -11,3 +11,6 @@ temp/
 region_dump.json
 *.bin
 .cache/
+Pipfile
+Pipfile.lock
+.env
