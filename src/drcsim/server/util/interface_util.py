@@ -80,7 +80,12 @@ class InterfaceUtil:
     @classmethod
     def is_managed_by_network_manager(cls, interface):
         output = ProcessUtil.get_output(["nmcli", "-g", "GENERAL.STATE", "device", "show", interface]).strip()
-        return "unmanaged" not in output
+        if "Could not connect: No such file or directory" in output:
+            # NetworkManager didn't respond appropriately, so we're gonna assume
+            # the interface is unmanaged.
+            Logger.warn("nmcli could not connect to NetworkManager. NM may not be running.")
+            return False
+        return output == "10 (unmanaged)"
 
     @classmethod
     def get_device_unmanaged_entry(cls, interface):
@@ -91,31 +96,8 @@ class InterfaceUtil:
         return "mac:" + cls.get_mac(interface)
 
     @classmethod
-    def set_unmanaged_by_network_manager(cls, interface):
-        Logger.debug("Adding interface \"%s-%s\" as an unmanaged interface to network manager", interface,
-                     cls.get_mac(interface))
-        with open(constants.PATH_CONF_NETWORK_MANAGER, "r") as conf_read:
-            conf = conf_read.read().splitlines()
-        added = False
-        entry = cls.get_device_unmanaged_entry(interface)
-        # Add Entry
-        for line in range(0, len(conf)):
-            # Add keyfile plugin if it's not enabled
-            if conf[line].startswith("plugins=") and "keyfile" not in conf[line]:
-                conf[line] += ",keyfile"
-            # Add unmanaged device
-            if conf[line].startswith("unmanaged-devices=") and entry not in conf[line]:
-                conf[line] += ";" + entry
-                added = True
-        # Add the initial unmanaged entry if it was not present
-        if not added:
-            conf.append("[keyfile]")
-            conf.append("unmanaged-devices=" + entry)
-        # Write
-        with open(constants.PATH_CONF_NETWORK_MANAGER, "w") as conf_write:
-            for line in conf:
-                conf_write.write(line + "\n")
-        # Restart the service
-        ProcessUtil.call(["service", "NetworkManager", "restart"])
-        ProcessUtil.call(["service", "network-manager", "restart"])
-        ProcessUtil.call(["service", "networking", "restart"])
+    def set_managed_by_network_manager(cls, interface, managed: False):
+        managed_str = "yes" if managed else "no"
+        Logger.debug("Setting interface \"%s-%s\" managed \"%s\"", interface,
+                     cls.get_mac(interface), managed_str)
+        ProcessUtil.call(("nmcli", "device", "set", interface, "managed", managed_str))

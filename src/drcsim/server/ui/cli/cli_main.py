@@ -115,7 +115,7 @@ class CliMain:
         response = input("Set %s as unmanaged? (y/n)" % interface)
         LoggerCli.debug(response)
         if response in ("y", "yes", "Y", "Yes", "YES"):
-            InterfaceUtil.set_unmanaged_by_network_manager(interface)
+            InterfaceUtil.set_managed_by_network_manager(interface, False)
         else:
             LoggerCli.throw(Exception("Interface is managed by Network Manager."))
 

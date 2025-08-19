@@ -98,7 +98,7 @@ class FrameRunServer(FrameTab):
                                      "to be set to unmanaged. Network Manager will not be able to control the interface"
                                      " after this.\nSet %s to unmanaged?" % self.wii_u_interface)
             if set_unmanaged:
-                InterfaceUtil.set_unmanaged_by_network_manager(self.wii_u_interface)
+                InterfaceUtil.set_managed_by_network_manager(self.wii_u_interface, False)
             else:
                 messagebox.showerror("Managed Interface", "Selected Wii U interface is managed by Network Manager.")
                 self.activate()
