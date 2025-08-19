@@ -2,6 +2,7 @@ import re
 import subprocess
 import time
 from threading import Thread
+from os.path import basename
 
 import pexpect
 
@@ -22,7 +23,14 @@ class WpaSupplicant(StatusSendingThread):
     NOT_FOUND = "NOT_FOUND"
     FAILED_START = "FAILED_START"
 
-    def __init__(self):
+    running = False
+    status = UNKNOWN
+    status_check_thread = None
+    wpa_supplicant_process = None
+    psk_thread = None
+    psk_thread_cli = None
+
+    def __init__(self, wpa_supplicant_path="wpa_supplicant_drc", wpa_cli_path="wpa_cli_drc"):
         """
         Helper for interacting with wpa_supplicant_drc and wpa_cli_drc.
         """
@@ -33,12 +41,8 @@ class WpaSupplicant(StatusSendingThread):
         self.wiiu_ap_regex = re.compile('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})(\s*\d*\s*-*\d*\s*)'
                                         '(\[WPA2-PSK-CCMP\])?'
                                         '(\[ESS\])(\s*)(WiiU|\\\\x00)(.+)$')  # \x00 is escaped (\\x00)
-        self.running = False
-        self.status = self.UNKNOWN
-        self.status_check_thread = None
-        self.wpa_supplicant_process = None
-        self.psk_thread = None
-        self.psk_thread_cli = None
+        self.wpa_supplicant_path = wpa_supplicant_path
+        self.wpa_cli_path = wpa_cli_path
 
     def connect(self, conf_path, interface, status_check=True):
         """
@@ -57,7 +61,7 @@ class WpaSupplicant(StatusSendingThread):
         self.running = True
         self.unblock_wlan()
         self.kill_wpa()
-        command = ["wpa_supplicant_drc", "-Dnl80211", "-i", interface, "-c", conf_path]
+        command = [self.wpa_supplicant_path, "-Dnl80211", "-i", interface, "-c", conf_path]
         if LoggerWpa.get_level() == LoggerWpa.FINER:
             command.append("-d")
         elif LoggerWpa.get_level() == LoggerWpa.VERBOSE:
@@ -119,13 +123,12 @@ class WpaSupplicant(StatusSendingThread):
             self.set_status(status)
             time.sleep(1)
 
-    @staticmethod
-    def kill_wpa():
+    def kill_wpa(self):
         """
         Makes a system call to kill wpa_supplicant_drc
         :return: None
         """
-        ProcessUtil.call(["killall", "wpa_supplicant_drc"])
+        ProcessUtil.call(["killall", basename(self.wpa_supplicant_path)])
 
     @staticmethod
     def unblock_wlan():
@@ -135,8 +138,7 @@ class WpaSupplicant(StatusSendingThread):
         """
         ProcessUtil.call(["rfkill", "unblock", "wlan"])
 
-    @staticmethod
-    def wpa_cli(command):
+    def wpa_cli(self, command):
         """
         Makes a system call to wpa_cli_drc
         :param command: command to pass to wpa_cli_drc
@@ -144,7 +146,7 @@ class WpaSupplicant(StatusSendingThread):
         """
         if isinstance(command, str):
             command = [command]
-        return ProcessUtil.get_output(["wpa_cli_drc", "-p", "/var/run/wpa_supplicant_drc"] + command, silent=True)
+        return ProcessUtil.get_output([self.wpa_cli_path, "-p", "/var/run/wpa_supplicant_drc"] + command, silent=True)
 
     def stop(self):
         """
@@ -215,7 +217,7 @@ class WpaSupplicant(StatusSendingThread):
         """
         try:
             LoggerWpa.debug("CLI expect starting")
-            self.psk_thread_cli = pexpect.spawn("wpa_cli_drc -p /var/run/wpa_supplicant_drc")
+            self.psk_thread_cli = pexpect.spawn(str(self.wpa_cli_path), ["-p", "/var/run/wpa_supplicant_drc"])
             LoggerWpa.debug("CLI expect Waiting for init")
             self.psk_thread_cli.expect("Interactive mode")
             # Scan for Wii U SSIDs

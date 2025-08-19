@@ -4,6 +4,7 @@ from tkinter.ttk import Entry, Combobox, Label, Notebook
 from drcsim.server.data import constants
 from drcsim.server.data.resource import Resource
 from drcsim.server.ui.cli.cli_main import CliMain
+from drcsim.server.data.args import Args
 from drcsim.server.ui.gui.frame.frame_tab import FrameTab
 from drcsim.server.util.interface_util import InterfaceUtil
 from drcsim.server.util.logging.logger_gui import LoggerGui
@@ -104,7 +105,7 @@ class FrameGetKey(FrameTab):
     def get_psk(self, code, interface):
         LoggerGui.debug("Attempting to get PSK")  # Don't log code
         CliMain.create_temp_config_file()
-        self.wpa_supplicant = WpaSupplicant()
+        self.wpa_supplicant = WpaSupplicant(wpa_cli_path=Args.args.wpa_cli, wpa_supplicant_path=Args.args.wpa_supplicant)
         self.wpa_supplicant.add_status_change_listener(self.wpa_status_changed)
         self.wpa_supplicant.get_psk(constants.PATH_CONF_CONNECT_TMP, interface, code)
 

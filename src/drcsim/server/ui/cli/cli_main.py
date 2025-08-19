@@ -43,7 +43,7 @@ class CliMain:
         wii_u_interface = Args.args.wii_u_interface
         self.check_interfaces(normal_interface, wii_u_interface)
         self.prompt_unmanaged(wii_u_interface)
-        self.wpa_supplicant = WpaSupplicant()
+        self.wpa_supplicant = WpaSupplicant(wpa_cli_path=Args.args.wpa_cli, wpa_supplicant_path=Args.args.wpa_supplicant)
         self.wpa_supplicant.connect(constants.PATH_CONF_CONNECT, wii_u_interface)
         self.wpa_supplicant.add_status_change_listener(self.status_changed)
         InterfaceUtil.dhclient(wii_u_interface)
@@ -98,7 +98,7 @@ class CliMain:
             LoggerCli.throw(Exception("WPS PIN should be 4 digits"))
         self.prompt_unmanaged(wii_u_interface)
         self.create_temp_config_file()
-        self.wpa_supplicant = WpaSupplicant()
+        self.wpa_supplicant = WpaSupplicant(wpa_cli_path=Args.wpa_cli, wpa_supplicant_path=Args.wpa_supplicant)
         self.wpa_supplicant.get_psk(constants.PATH_CONF_CONNECT_TMP, wii_u_interface, Args.args.wps_pin)
         self.wpa_supplicant.add_status_change_listener(self.status_changed_key)
         self.getting_key = True

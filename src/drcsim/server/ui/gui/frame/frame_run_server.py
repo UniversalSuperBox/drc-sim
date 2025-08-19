@@ -5,6 +5,7 @@ from tkinter.ttk import Label, Button, Combobox
 from drcsim.server.data import constants
 from drcsim.server.ui.gui.frame.frame_tab import FrameTab
 from drcsim.server.util.drc_sim_c import DrcSimC
+from drcsim.server.data.args import Args
 from drcsim.server.util.interface_util import InterfaceUtil
 from drcsim.server.util.logging.logger_gui import LoggerGui
 from drcsim.server.util.wpa_supplicant import WpaSupplicant
@@ -103,7 +104,7 @@ class FrameRunServer(FrameTab):
                 self.activate()
                 return
         LoggerGui.debug("Starting wpa supplicant")
-        self.wpa_supplicant = WpaSupplicant()
+        self.wpa_supplicant = WpaSupplicant(wpa_cli_path=Args.args.wpa_cli, wpa_supplicant_path=Args.args.wpa_supplicant)
         self.wpa_supplicant.add_status_change_listener(self.wpa_status_changed)
         self.wpa_supplicant.connect(constants.PATH_CONF_CONNECT, self.wii_u_interface)
         self.label_backend_status.config(text="WAITING")

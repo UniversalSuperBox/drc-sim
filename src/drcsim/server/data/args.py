@@ -4,6 +4,8 @@ import sys
 
 from drcsim.server.data import constants
 
+from pathlib import Path
+
 
 class Args:
     args = None
@@ -29,6 +31,11 @@ class Args:
         # Disable server
         arg_parser.add_argument("--disable-server", "--disable_server", action="store_const", const=True, default=False,
                                 help="dev: disable packet handling and serving")
+        # Set paths of binaries
+        arg_parser.add_argument("--wpa-cli", "--wpa_cli", type=Path, default="wpa_cli_drc", dest="wpa_cli",
+                                help="Path to the wpa_cli binary for this session. Default: 'wpa_cli_drc'")
+        arg_parser.add_argument("--wpa-supplicant", "--wpa_supplicant", type=Path, default="wpa_supplicant_drc", dest="wpa_supplicant",
+                                help="Path to the wpa_supplicant binary for this session. Default: 'wpa_supplicant_drc'")
         # CLI
         args = ["-c", "--cli", "-h", "--help"]
         found = False
